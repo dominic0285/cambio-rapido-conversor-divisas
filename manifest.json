@@ -1,0 +1,24 @@
+{
+  "name": "Cambio Rápido",
+  "short_name": "Cambio",
+  "description": "Conversor USD / Bolívares con tasa BCV oficial",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI0VBNDMzNSIgZD0iTTI0IDI0SDRjMCAxMS4wNSA4Ljk1IDIwIDIwIDIwdi0yMHoiLz48cGF0aCBmaWxsPSIjRkJCQzA1IiBkPSJNMjQgMjR2MjBjMTEuMDUgMCAyMC04Ljk1IDIwLTIwSDI0eiIvPjxwYXRoIGZpbGw9IiMzNEE4NTMiIGQ9Ik0yNCAyNGgyMGMwLTExLjA1LTguOTUtMjAtMjAtMjB2MjB6Ii8+PHBhdGggZmlsbD0iIzQyODVGNCIgZD0iTTI0IDI0VjRDMTIuOTUgNCA0IDEyLjk1IDQgMjRoMjB6Ii8+PGNpcmNsZSBmaWxsPSIjMTIxMjEyIiBjeD0iMjgiIGN5PSIyNCIgcj0iOCIvPjxyZWN0IGZpbGw9IiMxMjEyMTIiIHdpZHRoPSIxNCIgaGVpZ2h0PSI0OCIvPjwvc3ZnPg==",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI0VBNDMzNSIgZD0iTTI0IDI0SDRjMCAxMS4wNSA4Ljk1IDIwIDIwIDIwdi0yMHoiLz48cGF0aCBmaWxsPSIjRkJCQzA1IiBkPSJNMjQgMjR2MjBjMTEuMDUgMCAyMC04Ljk1IDIwLTIwSDI0eiIvPjxwYXRoIGZpbGw9IiMzNEE4NTMiIGQ9Ik0yNCAyNGgyMGMwLTExLjA1LTguOTUtMjAtMjAtMjB2MjB6Ii8+PHBhdGggZmlsbD0iIzQyODVGNCIgZD0iTTI0IDI0VjRDMTIuOTUgNCA0IDEyLjk1IDQgMjRoMjB6Ii8+PGNpcmNsZSBmaWxsPSIjMTIxMjEyIiBjeD0iMjgiIGN5PSIyNCIgcj0iOCIvPjxyZWN0IGZpbGw9IiMxMjEyMTIiIHdpZHRoPSIxNCIgaGVpZ2h0PSI0OCIvPjwvc3ZnPg==",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

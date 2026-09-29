@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cambio Rápido</title>
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS PWA: metas obligatorias para que funcione como app instalada -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Cambio Rápido">
+    <meta name="theme-color" content="#121212">
+
+    <!-- iOS PWA: icono que aparece en la pantalla de inicio -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!--
+        FIX CLAVE: Se eliminó Google Fonts (era render-blocking).
+        Se usa la pila de fuentes del sistema: en iPhone usa SF Pro
+        (idéntica en calidad a Roboto), en Android usa Roboto nativo.
+        Carga instantánea, cero peticiones externas.
+    -->
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1E1E1E;
+            --surface-variant: #2D2D2D;
+            --primary-color: #A8C7FA;
+            --text-color: #E3E3E3;
+            --text-secondary: #C4C7C5;
+            --accent-green: #6DD58C;
+            /* Fuentes del sistema: SF Pro en iOS, Roboto en Android, Segoe UI en Windows */
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            /* Evita el flash blanco inicial en iOS */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app-header {
+            margin-top: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .google-d-logo {
+            width: 70px;
+            height: 70px;
+            position: relative;
+        }
+
+        .app-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+        }
+
+        .main-card {
+            background: var(--surface-color);
+            padding: 30px 24px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .input-group {
+            background-color: var(--surface-variant);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: border-color 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--primary-color);
+            background-color: #333;
+        }
+
+        .currency-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            width: 40px;
+            flex-shrink: 0;
+        }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.8rem;
+            font-weight: 400;
+            text-align: right;
+            outline: none;
+            font-family: var(--font);
+            /* Evita zoom automático en iOS al hacer focus */
+            font-size: max(1.8rem, 16px);
+        }
+
+        .rate-container {
+            margin-top: 25px;
+            background: #252525;
+            border-radius: 20px;
+            padding: 4px;
+            position: relative;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 18px;
+            background-color: transparent;
+            color: var(--accent-green);
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: var(--font);
+            appearance: none;
+            -webkit-appearance: none;
+            text-align: center;
+            cursor: pointer;
+        }
+        select:focus { outline: none; background-color: #2F2F2F; }
+
+        .select-arrow {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-green);
+            pointer-events: none;
+            font-size: 0.8rem;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <svg class="google-d-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#EA4335" d="M24 24H4c0 11.05 8.95 20 20 20v-20z"/>
+        <path fill="#FBBC05" d="M24 24v20c11.05 0 20-8.95 20-20H24z"/>
+        <path fill="#34A853" d="M24 24h20c0-11.05-8.95-20-20-20v20z"/>
+        <path fill="#4285F4" d="M24 24V4C12.95 4 4 12.95 4 24h20z"/>
+        <circle fill="#121212" cx="28" cy="24" r="8"/>
+        <rect fill="#121212" x="0" y="0" width="14" height="48"/>
+    </svg>
+    <div class="app-title">Cambio Rápido</div>
+</div>
+
+<div class="main-card">
+    <div class="input-group">
+        <span class="currency-label">$</span>
+        <input type="tel" id="usdInput" placeholder="0,00" inputmode="decimal">
+    </div>
+    <div class="input-group">
+        <span class="currency-label">Bs</span>
+        <input type="tel" id="bsInput" placeholder="0,00" inputmode="decimal">
+    </div>
+    <div class="rate-container" id="rateContainer" style="display: none;">
+        <select id="rateSelector"></select>
+        <span class="select-arrow">▼</span>
+    </div>
+    <div id="loadingMsg" class="loading-text">Iniciando...</div>
+</div>
+
+<script>
+    const usdInput = document.getElementById('usdInput');
+    const bsInput = document.getElementById('bsInput');
+    const rateSelector = document.getElementById('rateSelector');
+    const loadingMsg = document.getElementById('loadingMsg');
+    const rateContainer = document.getElementById('rateContainer');
+
+    const STORAGE_KEY = 'cambio_rapido_history_v2';
+    const MONTH_KEY = 'cr_month_check';
+    let currentRate = 0;
+
+    // --- INPUT ESTILO POS ---
+    function handleInputMask(e, isUsd) {
+        let val = e.target.value.replace(/\D/g, '');
+        let numberVal = val ? parseInt(val) : 0;
+        e.target.value = formatMoney(numberVal / 100);
+        calculate(numberVal / 100, isUsd);
+    }
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function calculate(amount, sourceIsUsd) {
+        if (!currentRate) return;
+        if (sourceIsUsd) {
+            bsInput.value = formatMoney(amount * currentRate);
+        } else {
+            usdInput.value = formatMoney(amount / currentRate);
+        }
+    }
+
+    // --- HISTORIAL ---
+    function normalizeDate(str) { return str.toLowerCase().replace(/,/g, '').trim(); }
+
+
+    function checkMonthReset() {
+        const now = new Date();
+        const currentMonthIdx = now.getMonth();
+        const storedMonth = localStorage.getItem(MONTH_KEY);
+        if (storedMonth !== null && parseInt(storedMonth) !== currentMonthIdx) {
+            localStorage.removeItem(STORAGE_KEY);
+        }
+        localStorage.setItem(MONTH_KEY, currentMonthIdx);
+    }
+
+    function saveToHistory(rate, dateString) {
+        let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        const existingIndex = history.findIndex(item => normalizeDate(item.date) === normalizeDate(dateString));
+        if (existingIndex !== -1) {
+            if (history[existingIndex].rate !== rate) {
+                const futureLabel = "📅 Próxima Tasa (BCV)";
+                if (!history.some(item => item.date === futureLabel && item.rate === rate)) {
+                    history.push({ date: futureLabel, rate: rate, timestamp: new Date().getTime() });
+                }
+            }
+        } else {
+            history.push({ date: dateString, rate: rate, timestamp: new Date().getTime() });
+        }
+        history.sort((a, b) => b.timestamp - a.timestamp);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    // FIX: renderSelector se llama primero (datos del cache local),
+    // y fetchRate actualiza en segundo plano sin bloquear la UI.
+    async function fetchRate() {
+        checkMonthReset();
+
+        // Muestra los datos cacheados inmediatamente (no espera la red)
+        renderSelector();
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // timeout 5s
+            const response = await fetch('https://ve.dolarapi.com/v1/dolares/oficial', {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) throw new Error('Error API');
+            const data = await response.json();
+            const apiRate = parseFloat(data.promedio);
+            const dateObj = new Date(data.fechaActualizacion);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'America/Caracas' };
+            let dateStr = dateObj.toLocaleDateString('es-VE', options).replace(/,/g, '');
+            dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+            saveToHistory(apiRate, dateStr);
+            renderSelector(); // Actualiza con el dato nuevo
+        } catch (error) {
+            // Fallo silencioso: ya se mostraron los datos del cache arriba
+            if (loadingMsg.style.display !== 'none') {
+                loadingMsg.innerText = "Modo Offline";
+            }
+        }
+    }
+
+    function renderSelector() {
+        const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if (history.length === 0) {
+            loadingMsg.innerText = "Conéctate para actualizar";
+            return;
+        }
+        loadingMsg.style.display = 'none';
+        rateContainer.style.display = 'block';
+        const prevValue = rateSelector.value;
+        rateSelector.innerHTML = '';
+        history.forEach((item) => {
+            const option = document.createElement('option');
+            option.value = item.rate;
+            option.text = `${item.date} : ${formatMoney(item.rate)} Bs`;
+            rateSelector.appendChild(option);
+        });
+        // Mantiene la selección previa si aún existe
+        if (prevValue && [...rateSelector.options].some(o => o.value === prevValue)) {
+            rateSelector.value = prevValue;
+        } else {
+            rateSelector.selectedIndex = 0;
+        }
+        updateCurrentRate();
+    }
+
+    function updateCurrentRate() {
+        currentRate = parseFloat(rateSelector.value);
+        let usdValStr = usdInput.value.replace(/\./g, '').replace(/,/g, '');
+        if (usdValStr) {
+            let usdNum = parseInt(usdValStr) / 100;
+            calculate(usdNum, true);
+        }
+    }
+
+    usdInput.addEventListener('input', (e) => handleInputMask(e, true));
+    bsInput.addEventListener('input', (e) => handleInputMask(e, false));
+    rateSelector.addEventListener('change', updateCurrentRate);
+
+    fetchRate();
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+    }
+</script>
+</body>
+</html>
