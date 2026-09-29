@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Cambio Rápido",
+    "slug": "cambio-rapido",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.dom0285.cambiorapido",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "./app.plugin.js"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b43e1684-1872-47f0-9240-66c58e3d8cdc"
+      }
+    },
+    "owner": "dominic0285"
+  }
+}
