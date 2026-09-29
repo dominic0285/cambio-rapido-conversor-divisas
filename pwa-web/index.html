@@ -323,6 +323,12 @@
         }
     }
 
+    // Los dígitos siempre entran por la derecha: el cursor se mantiene al final
+    [usdInput, bsInput].forEach(el => {
+        const alFinal = () => requestAnimationFrame(() => el.setSelectionRange(el.value.length, el.value.length));
+        el.addEventListener('focus', alFinal);
+        el.addEventListener('click', alFinal);
+    });
     usdInput.addEventListener('input', (e) => handleInputMask(e, true));
     bsInput.addEventListener('input', (e) => handleInputMask(e, false));
     rateSelector.addEventListener('change', updateCurrentRate);

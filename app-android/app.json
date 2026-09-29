@@ -28,12 +28,6 @@
     },
     "plugins": [
       "./app.plugin.js"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "b43e1684-1872-47f0-9240-66c58e3d8cdc"
-      }
-    },
-    "owner": "dominic0285"
+    ]
   }
 }

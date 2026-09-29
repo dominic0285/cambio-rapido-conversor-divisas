@@ -1,6 +1,6 @@
 // Incrementa la versión cada vez que despliegues cambios
 // para forzar que los usuarios reciban el archivo nuevo.
-const CACHE_NAME = 'cambio-rapido-v3';
+const CACHE_NAME = 'cambio-rapido-v4';
 
 // Solo cacheamos los assets locales (HTML y manifest).
 // Las fuentes ya no existen (se eliminaron), y la API
